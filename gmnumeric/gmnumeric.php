@@ -161,7 +161,25 @@ class Gmnumeric extends Module
                 'name' => 'GMNUMERIC_NEXT_ID',
                 'desc' => $this->l('Enter a number greater than the current Order ID, with digits up to 9 minus the prefix length.')
             );
-            array_splice($fields_form['form']['input'], 1, 0, array($next_id));
+            $allowIDBackAdjust_option = array(
+                array(
+                    'id_option' => 'BACK',
+                    'name' => $this->l('Allow Backward Adjustment of Order ID')
+                ),
+            );
+            $allowIDBackAdjust = array(
+                'type' => 'checkbox',
+                'name' => 'GMNUMERIC',
+                'class' => 't',
+                'is_bool' => true,
+                'desc' => $this->l('Caution! using this option may result in duplicate Order IDs'),
+                'values' => array(
+                    'query' => $allowIDBackAdjust_option,
+                    'id' => 'id_option',
+                    'name' => 'name'
+                ),
+            );
+            array_splice($fields_form['form']['input'], 1, 0, array($next_id,$allowIDBackAdjust));
             $helper->fields_value['GMNUMERIC_NEXT_ID'] = $this->getOrderQuantity() + Configuration::get('GMNUMERIC_OFFSET');
         }
         return $helper->generateForm(array($fields_form));
@@ -192,7 +210,7 @@ class Gmnumeric extends Module
                 return 1;
             }
             $orderQuantity = $this->getOrderQuantity();
-            if ($next_id < $orderQuantity + Configuration::get('GMNUMERIC_OFFSET')) {
+            if (($next_id < $orderQuantity + Configuration::get('GMNUMERIC_OFFSET')) && !Tools::getValue('GMNUMERIC_BACK')) {
                 //Return 2 if the input smaller than the current Order ID.
                 return 2;
             }

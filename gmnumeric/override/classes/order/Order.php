@@ -33,6 +33,7 @@ class Order extends OrderCore
                  WHERE TABLE_SCHEMA = \''._DB_NAME_.'\'
                  AND TABLE_NAME = \''._DB_PREFIX_.'orders\'';
             $nextOrderId = (int) Db::getInstance()->getValue($query);
+            $nextOrderId += Configuration::get('GMNUMERIC_OFFSET');
             $zeros = Configuration::get('GMNUMERIC_ZEROS');
             if ($zeros == 'on') {
                 $reference = sprintf('%0'.$restLength.'d', $nextOrderId);

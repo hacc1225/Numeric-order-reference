@@ -39,7 +39,7 @@ class Gmnumeric extends Module
         }
         return parent::install() &&
             Configuration::updateValue('GMNUMERIC_RANDOM', true) &&
-            Configuration::updateValue('GMNUMERIC_RANDOM', true) &&
+            Configuration::updateValue('GMNUMERIC_ZEROS', '')    &&
             Configuration::updateValue('GMNUMERIC_PREFIX', '');
     }
 

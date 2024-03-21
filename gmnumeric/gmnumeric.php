@@ -57,18 +57,21 @@ class Gmnumeric extends Module
     {
         $output = '';
         if (Tools::isSubmit('submit'.$this->name)) {
-            $returnValue = $this->postProcess();
-            if ($returnValue == 0) {
-                $output .= $this->displayConfirmation($this->l('Settings updated'));
-            }
-            else if ($returnValue == 1) {
-                $output .= $this->displayError($this->l('Input for new next Order ID isn\'t a non-negative number!'));
-            }
-            else if ($returnValue == 2) {
-                $output .= $this->displayError($this->l('New next Order ID is less than current next Order ID!'));
-            }
-            else {
-                $output .= $this->displayError($this->l('New next Order ID exceeds digit limit of 9 minus prefix length!'));
+            switch ($this->postProcess()) {
+                case 0:
+                    $output .= $this->displayConfirmation($this->l('Settings updated'));
+                    break;
+                case 1:
+                    $output .= $this->displayError($this->l('Input for new next Order ID isn\'t a non-negative number!'));
+                    break;
+                case 2:
+                    $output .= $this->displayError($this->l('New next Order ID is less than current next Order ID!'));
+                    break;
+                case 3:
+                    $output .= $this->displayError($this->l('New next Order ID exceeds digit limit of 9 minus prefix length!'));
+                    break;
+                default:
+                    $output .= $this->displayError($this->l('Unknown error'));
             }
         }
         $this->context->smarty->assign('module_dir', $this->_path);
